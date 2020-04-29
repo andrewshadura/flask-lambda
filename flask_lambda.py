@@ -58,14 +58,14 @@ def make_environ(event):
     environ['HOST'] = '%(HTTP_HOST)s:%(HTTP_X_FORWARDED_PORT)s' % environ
     environ['SCRIPT_NAME'] = ''
 
-    environ['SERVER_PORT'] = environ['HTTP_X_FORWARDED_PORT']
+    environ['SERVER_PORT'] = environ.get('HTTP_X_FORWARDED_PORT', '')
     environ['SERVER_PROTOCOL'] = 'HTTP/1.1'
 
     environ['CONTENT_LENGTH'] = str(
         len(event['body']) if event['body'] else ''
     )
 
-    environ['wsgi.url_scheme'] = environ['HTTP_X_FORWARDED_PROTO']
+    environ['wsgi.url_scheme'] = environ.get('HTTP_X_FORWARDED_PROTO')
     environ['wsgi.input'] = StringIO(event['body'] or '')
     environ['wsgi.version'] = (1, 0)
     environ['wsgi.errors'] = sys.stderr
