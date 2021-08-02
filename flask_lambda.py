@@ -16,21 +16,10 @@
 
 import sys
 
-try:
-    from urllib import urlencode
-except ImportError:
-    from urllib.parse import urlencode
+from io import StringIO
+from urllib.parse import urlencode
 
 from flask import Flask
-
-try:
-    from cStringIO import StringIO
-except ImportError:
-    try:
-        from StringIO import StringIO
-    except ImportError:
-        from io import StringIO
-
 from werkzeug.wrappers import BaseRequest
 
 
