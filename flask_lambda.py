@@ -43,7 +43,10 @@ def make_environ(event):
     environ['REQUEST_METHOD'] = event['httpMethod']
     environ['PATH_INFO'] = event['path']
     environ['QUERY_STRING'] = urlencode(qs) if qs else ''
-    environ['REMOTE_ADDR'] = event['requestContext']['identity']['sourceIp']
+    if 'identity' in event['requestContext']:
+        environ['REMOTE_ADDR'] = event['requestContext']['identity']['sourceIp']
+    elif 'HTTP_X_ENVOY_EXTERNAL_ADDRESS' in environ:
+        environ['REMOTE_ADDR'] = environ['HTTP_X_ENVOY_EXTERNAL_ADDRESS']
     environ['HOST'] = '%(HTTP_HOST)s:%(HTTP_X_FORWARDED_PORT)s' % environ
     environ['SCRIPT_NAME'] = environ.get('SCRIPT_NAME', '')
 
