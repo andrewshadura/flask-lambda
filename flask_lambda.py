@@ -50,6 +50,10 @@ def make_environ(event):
         environ['REMOTE_ADDR'] = event['requestContext']['identity']['sourceIp']
     elif 'HTTP_X_ENVOY_EXTERNAL_ADDRESS' in environ:
         environ['REMOTE_ADDR'] = environ['HTTP_X_ENVOY_EXTERNAL_ADDRESS']
+
+    if 'HTTP_X_FORWARDED_PROTO' in environ:
+        environ['HTTP_X_FORWARDED_PORT'] = '80' if environ['HTTP_X_FORWARDED_PROTO'] == 'http' else '443'
+
     environ['HOST'] = '%(HTTP_HOST)s:%(HTTP_X_FORWARDED_PORT)s' % environ
     environ['SCRIPT_NAME'] = environ.get('SCRIPT_NAME', '')
 
