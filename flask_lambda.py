@@ -27,7 +27,10 @@ __version__ = '0.0.4'
 
 
 def make_environ(event):
-    environ = {}
+    environ = {
+        'HTTP_HOST': 'default',
+        'SERVER_PROTOCOL': 'HTTP/1.1',
+    }
 
     for hdr_name, hdr_value in (event['headers'] or {}).items():
         hdr_name = hdr_name.replace('-', '_').upper()
@@ -51,7 +54,6 @@ def make_environ(event):
     environ['SCRIPT_NAME'] = environ.get('SCRIPT_NAME', '')
 
     environ['SERVER_PORT'] = environ.get('HTTP_X_FORWARDED_PORT', '')
-    environ['SERVER_PROTOCOL'] = 'HTTP/1.1'
 
     environ['CONTENT_LENGTH'] = str(
         len(event['body']) if event['body'] else ''
